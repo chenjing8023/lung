@@ -1,0 +1,1977 @@
+node {
+  name: "input_producer/Const"
+  op: "Const"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: 2
+          }
+        }
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+            size: 2
+          }
+        }
+        string_val: "/Users/chenjing/PycharmProjects/mytask/dest/1.3.6.1.4.1.14519.5.2.1.6279.6001.109002525524522225658609808059_0310_0025_0068.bin"
+        string_val: "/Users/chenjing/PycharmProjects/mytask/dest/1.3.6.1.4.1.14519.5.2.1.6279.6001.109002525524522225658609808059_0310_0026_0057.bin"
+      }
+    }
+  }
+}
+node {
+  name: "input_producer/Size"
+  op: "Const"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 2
+      }
+    }
+  }
+}
+node {
+  name: "input_producer/Greater/y"
+  op: "Const"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 0
+      }
+    }
+  }
+}
+node {
+  name: "input_producer/Greater"
+  op: "Greater"
+  input: "input_producer/Size"
+  input: "input_producer/Greater/y"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+}
+node {
+  name: "input_producer/Assert/Const"
+  op: "Const"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+        }
+        string_val: "string_input_producer requires a non-null input tensor"
+      }
+    }
+  }
+}
+node {
+  name: "input_producer/Assert/Assert/data_0"
+  op: "Const"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+        }
+        string_val: "string_input_producer requires a non-null input tensor"
+      }
+    }
+  }
+}
+node {
+  name: "input_producer/Assert/Assert"
+  op: "Assert"
+  input: "input_producer/Greater"
+  input: "input_producer/Assert/Assert/data_0"
+  attr {
+    key: "T"
+    value {
+      list {
+        type: DT_STRING
+      }
+    }
+  }
+  attr {
+    key: "summarize"
+    value {
+      i: 3
+    }
+  }
+}
+node {
+  name: "input_producer/Identity"
+  op: "Identity"
+  input: "input_producer/Const"
+  input: "^input_producer/Assert/Assert"
+  attr {
+    key: "T"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: 2
+          }
+        }
+      }
+    }
+  }
+}
+node {
+  name: "input_producer/RandomShuffle"
+  op: "RandomShuffle"
+  input: "input_producer/Identity"
+  attr {
+    key: "T"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: 2
+          }
+        }
+      }
+    }
+  }
+  attr {
+    key: "seed"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "seed2"
+    value {
+      i: 0
+    }
+  }
+}
+node {
+  name: "input_producer"
+  op: "FIFOQueueV2"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+  attr {
+    key: "capacity"
+    value {
+      i: 32
+    }
+  }
+  attr {
+    key: "component_types"
+    value {
+      list {
+        type: DT_STRING
+      }
+    }
+  }
+  attr {
+    key: "container"
+    value {
+      s: ""
+    }
+  }
+  attr {
+    key: "shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+  attr {
+    key: "shared_name"
+    value {
+      s: ""
+    }
+  }
+}
+node {
+  name: "input_producer/input_producer_EnqueueMany"
+  op: "QueueEnqueueManyV2"
+  input: "input_producer"
+  input: "input_producer/RandomShuffle"
+  attr {
+    key: "Tcomponents"
+    value {
+      list {
+        type: DT_STRING
+      }
+    }
+  }
+  attr {
+    key: "timeout_ms"
+    value {
+      i: -1
+    }
+  }
+}
+node {
+  name: "input_producer/input_producer_Close"
+  op: "QueueCloseV2"
+  input: "input_producer"
+  attr {
+    key: "cancel_pending_enqueues"
+    value {
+      b: false
+    }
+  }
+}
+node {
+  name: "input_producer/input_producer_Close_1"
+  op: "QueueCloseV2"
+  input: "input_producer"
+  attr {
+    key: "cancel_pending_enqueues"
+    value {
+      b: true
+    }
+  }
+}
+node {
+  name: "input_producer/input_producer_Size"
+  op: "QueueSizeV2"
+  input: "input_producer"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+}
+node {
+  name: "input_producer/Cast"
+  op: "Cast"
+  input: "input_producer/input_producer_Size"
+  attr {
+    key: "DstT"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "SrcT"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+}
+node {
+  name: "input_producer/mul/y"
+  op: "Const"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+        }
+        float_val: 0.03125
+      }
+    }
+  }
+}
+node {
+  name: "input_producer/mul"
+  op: "Mul"
+  input: "input_producer/Cast"
+  input: "input_producer/mul/y"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+}
+node {
+  name: "input_producer/fraction_of_32_full/tags"
+  op: "Const"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+        }
+        string_val: "input_producer/fraction_of_32_full"
+      }
+    }
+  }
+}
+node {
+  name: "input_producer/fraction_of_32_full"
+  op: "ScalarSummary"
+  input: "input_producer/fraction_of_32_full/tags"
+  input: "input_producer/mul"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+}
+node {
+  name: "FixedLengthRecordReaderV2"
+  op: "FixedLengthRecordReaderV2"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+  attr {
+    key: "container"
+    value {
+      s: ""
+    }
+  }
+  attr {
+    key: "footer_bytes"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "header_bytes"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "hop_bytes"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "record_bytes"
+    value {
+      i: 1601
+    }
+  }
+  attr {
+    key: "shared_name"
+    value {
+      s: ""
+    }
+  }
+}
+node {
+  name: "ReaderReadV2"
+  op: "ReaderReadV2"
+  input: "FixedLengthRecordReaderV2"
+  input: "input_producer"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+        shape {
+        }
+      }
+    }
+  }
+}
+node {
+  name: "DecodeRaw"
+  op: "DecodeRaw"
+  input: "ReaderReadV2:1"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: -1
+          }
+        }
+      }
+    }
+  }
+  attr {
+    key: "little_endian"
+    value {
+      b: true
+    }
+  }
+  attr {
+    key: "out_type"
+    value {
+      type: DT_INT8
+    }
+  }
+}
+node {
+  name: "ones_like/tensor"
+  op: "Const"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: 1
+          }
+        }
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 0
+      }
+    }
+  }
+}
+node {
+  name: "ones_like/Shape"
+  op: "Const"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: 1
+          }
+        }
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "ones_like/Const"
+  op: "Const"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "ones_like"
+  op: "Fill"
+  input: "ones_like/Shape"
+  input: "ones_like/Const"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: 1
+          }
+        }
+      }
+    }
+  }
+}
+node {
+  name: "StridedSlice/begin"
+  op: "Const"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: 1
+          }
+        }
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 0
+      }
+    }
+  }
+}
+node {
+  name: "StridedSlice/end"
+  op: "Const"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: 1
+          }
+        }
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "StridedSlice"
+  op: "StridedSlice"
+  input: "DecodeRaw"
+  input: "StridedSlice/begin"
+  input: "StridedSlice/end"
+  input: "ones_like"
+  attr {
+    key: "Index"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "T"
+    value {
+      type: DT_INT8
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: -1
+          }
+        }
+      }
+    }
+  }
+  attr {
+    key: "begin_mask"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "ellipsis_mask"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "end_mask"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "new_axis_mask"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "shrink_axis_mask"
+    value {
+      i: 0
+    }
+  }
+}
+node {
+  name: "Cast"
+  op: "Cast"
+  input: "StridedSlice"
+  attr {
+    key: "DstT"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "SrcT"
+    value {
+      type: DT_INT8
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: 1
+          }
+        }
+      }
+    }
+  }
+}
+node {
+  name: "ones_like_1/tensor"
+  op: "Const"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: 1
+          }
+        }
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "ones_like_1/Shape"
+  op: "Const"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: 1
+          }
+        }
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "ones_like_1/Const"
+  op: "Const"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "ones_like_1"
+  op: "Fill"
+  input: "ones_like_1/Shape"
+  input: "ones_like_1/Const"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: 1
+          }
+        }
+      }
+    }
+  }
+}
+node {
+  name: "StridedSlice_1/begin"
+  op: "Const"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: 1
+          }
+        }
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "StridedSlice_1/end"
+  op: "Const"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: 1
+          }
+        }
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 1601
+      }
+    }
+  }
+}
+node {
+  name: "StridedSlice_1"
+  op: "StridedSlice"
+  input: "DecodeRaw"
+  input: "StridedSlice_1/begin"
+  input: "StridedSlice_1/end"
+  input: "ones_like_1"
+  attr {
+    key: "Index"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "T"
+    value {
+      type: DT_INT8
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: -1
+          }
+        }
+      }
+    }
+  }
+  attr {
+    key: "begin_mask"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "ellipsis_mask"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "end_mask"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "new_axis_mask"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "shrink_axis_mask"
+    value {
+      i: 0
+    }
+  }
+}
+node {
+  name: "Reshape/shape"
+  op: "Const"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: 1
+          }
+        }
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 1600
+      }
+    }
+  }
+}
+node {
+  name: "Reshape"
+  op: "Reshape"
+  input: "StridedSlice_1"
+  input: "Reshape/shape"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT8
+    }
+  }
+  attr {
+    key: "Tshape"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: 1600
+          }
+        }
+      }
+    }
+  }
+}
+node {
+  name: "Cast_1"
+  op: "Cast"
+  input: "Reshape"
+  attr {
+    key: "DstT"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "SrcT"
+    value {
+      type: DT_INT8
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: 1600
+          }
+        }
+      }
+    }
+  }
+}
+node {
+  name: "Reshape_1/shape"
+  op: "Const"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: 1
+          }
+        }
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 1600
+      }
+    }
+  }
+}
+node {
+  name: "Reshape_1"
+  op: "Reshape"
+  input: "Cast_1"
+  input: "Reshape_1/shape"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "Tshape"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: 1600
+          }
+        }
+      }
+    }
+  }
+}
+node {
+  name: "shuffle_batch/Const"
+  op: "Const"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_BOOL
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_BOOL
+        tensor_shape {
+        }
+        bool_val: true
+      }
+    }
+  }
+}
+node {
+  name: "shuffle_batch/random_shuffle_queue"
+  op: "RandomShuffleQueueV2"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+  attr {
+    key: "capacity"
+    value {
+      i: 20003
+    }
+  }
+  attr {
+    key: "component_types"
+    value {
+      list {
+        type: DT_FLOAT
+        type: DT_INT32
+      }
+    }
+  }
+  attr {
+    key: "container"
+    value {
+      s: ""
+    }
+  }
+  attr {
+    key: "min_after_dequeue"
+    value {
+      i: 20000
+    }
+  }
+  attr {
+    key: "seed"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "seed2"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: 1600
+          }
+        }
+        shape {
+          dim {
+            size: 1
+          }
+        }
+      }
+    }
+  }
+  attr {
+    key: "shared_name"
+    value {
+      s: ""
+    }
+  }
+}
+node {
+  name: "shuffle_batch/random_shuffle_queue_enqueue"
+  op: "QueueEnqueueV2"
+  input: "shuffle_batch/random_shuffle_queue"
+  input: "Reshape_1"
+  input: "Cast"
+  attr {
+    key: "Tcomponents"
+    value {
+      list {
+        type: DT_FLOAT
+        type: DT_INT32
+      }
+    }
+  }
+  attr {
+    key: "timeout_ms"
+    value {
+      i: -1
+    }
+  }
+}
+node {
+  name: "shuffle_batch/random_shuffle_queue_Close"
+  op: "QueueCloseV2"
+  input: "shuffle_batch/random_shuffle_queue"
+  attr {
+    key: "cancel_pending_enqueues"
+    value {
+      b: false
+    }
+  }
+}
+node {
+  name: "shuffle_batch/random_shuffle_queue_Close_1"
+  op: "QueueCloseV2"
+  input: "shuffle_batch/random_shuffle_queue"
+  attr {
+    key: "cancel_pending_enqueues"
+    value {
+      b: true
+    }
+  }
+}
+node {
+  name: "shuffle_batch/random_shuffle_queue_Size"
+  op: "QueueSizeV2"
+  input: "shuffle_batch/random_shuffle_queue"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+}
+node {
+  name: "shuffle_batch/sub/y"
+  op: "Const"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 20000
+      }
+    }
+  }
+}
+node {
+  name: "shuffle_batch/sub"
+  op: "Sub"
+  input: "shuffle_batch/random_shuffle_queue_Size"
+  input: "shuffle_batch/sub/y"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+}
+node {
+  name: "shuffle_batch/Maximum/x"
+  op: "Const"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 0
+      }
+    }
+  }
+}
+node {
+  name: "shuffle_batch/Maximum"
+  op: "Maximum"
+  input: "shuffle_batch/Maximum/x"
+  input: "shuffle_batch/sub"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+}
+node {
+  name: "shuffle_batch/Cast"
+  op: "Cast"
+  input: "shuffle_batch/Maximum"
+  attr {
+    key: "DstT"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "SrcT"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+}
+node {
+  name: "shuffle_batch/mul/y"
+  op: "Const"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+        }
+        float_val: 0.3333333432674408
+      }
+    }
+  }
+}
+node {
+  name: "shuffle_batch/mul"
+  op: "Mul"
+  input: "shuffle_batch/Cast"
+  input: "shuffle_batch/mul/y"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+}
+node {
+  name: "shuffle_batch/fraction_over_20000_of_3_full/tags"
+  op: "Const"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+        }
+        string_val: "shuffle_batch/fraction_over_20000_of_3_full"
+      }
+    }
+  }
+}
+node {
+  name: "shuffle_batch/fraction_over_20000_of_3_full"
+  op: "ScalarSummary"
+  input: "shuffle_batch/fraction_over_20000_of_3_full/tags"
+  input: "shuffle_batch/mul"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+}
+node {
+  name: "shuffle_batch/n"
+  op: "Const"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "shuffle_batch"
+  op: "QueueDequeueManyV2"
+  input: "shuffle_batch/random_shuffle_queue"
+  input: "shuffle_batch/n"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: 1
+          }
+          dim {
+            size: 1600
+          }
+        }
+        shape {
+          dim {
+            size: 1
+          }
+          dim {
+            size: 1
+          }
+        }
+      }
+    }
+  }
+  attr {
+    key: "component_types"
+    value {
+      list {
+        type: DT_FLOAT
+        type: DT_INT32
+      }
+    }
+  }
+  attr {
+    key: "timeout_ms"
+    value {
+      i: -1
+    }
+  }
+}
+node {
+  name: "images/tag"
+  op: "Const"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+        }
+        string_val: "images"
+      }
+    }
+  }
+}
+node {
+  name: "images"
+  op: "ImageSummary"
+  input: "images/tag"
+  input: "shuffle_batch"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+  attr {
+    key: "bad_color"
+    value {
+      tensor {
+        dtype: DT_UINT8
+        tensor_shape {
+          dim {
+            size: 4
+          }
+        }
+        int_val: 255
+        int_val: 0
+        int_val: 0
+        int_val: 255
+      }
+    }
+  }
+  attr {
+    key: "max_images"
+    value {
+      i: 3
+    }
+  }
+}
+node {
+  name: "Reshape_2/shape"
+  op: "Const"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: 1
+          }
+        }
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "Reshape_2"
+  op: "Reshape"
+  input: "shuffle_batch:1"
+  input: "Reshape_2/shape"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "Tshape"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: 1
+          }
+        }
+      }
+    }
+  }
+}
+node {
+  name: "report_uninitialized_variables/Const"
+  op: "Const"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+          }
+        }
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+          dim {
+          }
+        }
+      }
+    }
+  }
+}
+node {
+  name: "init"
+  op: "NoOp"
+}
+node {
+  name: "init_1"
+  op: "NoOp"
+}
+node {
+  name: "init_all_tables"
+  op: "NoOp"
+}
+node {
+  name: "group_deps"
+  op: "NoOp"
+  input: "^init_1"
+  input: "^init_all_tables"
+}
+node {
+  name: "Merge/MergeSummary"
+  op: "MergeSummary"
+  input: "input_producer/fraction_of_32_full"
+  input: "shuffle_batch/fraction_over_20000_of_3_full"
+  input: "images"
+  attr {
+    key: "N"
+    value {
+      i: 3
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+}
+versions {
+  producer: 22
+}
