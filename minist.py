@@ -8,10 +8,12 @@ import sys
 from tensorflow.examples.tutorials.mnist import input_data
 
 import tensorflow as tf
-import myinput
+import chenjing
 
 FLAGS = None
-
+WIDTH = 40
+HEIGHT = 40
+NUM_CLASS = 1
 
 def deepnn(x):
     """deepnn builds the graph for a deep net for classifying digits.
@@ -27,7 +29,7 @@ def deepnn(x):
     # Reshape to use within a convolutional neural net.
     # Last dimension is for "features" - there is only one here, since images are
     # grayscale -- it would be 3 for an RGB image, 4 for RGBA, etc.
-    x_image = tf.reshape(x, [-1, 28, 28, 1])
+    x_image = tf.reshape(x, [-1, HEIGHT, WIDTH, 1])
 
   # First convolutional layer - maps one grayscale image to 32 feature maps.
     W_conv1 = weight_variable([5, 5, 1, 32])
@@ -47,10 +49,10 @@ def deepnn(x):
 
     # Fully connected layer 1 -- after 2 round of downsampling, our 28x28 image
     # is down to 7x7x64 feature maps -- maps this to 1024 features.
-    W_fc1 = weight_variable([7 * 7 * 64, 1024])
-    b_fc1 = bias_variable([1024])
+    W_fc1 = weight_variable([10 * 10 * 64, 6400])
+    b_fc1 = bias_variable([6400])
 
-    h_pool2_flat = tf.reshape(h_pool2, [-1, 7*7*64])
+    h_pool2_flat = tf.reshape(h_pool2, [-1, 10 * 10 * 64])
     h_fc1 = tf.nn.relu(tf.matmul(h_pool2_flat, W_fc1) + b_fc1)
 
     # Dropout - controls the complexity of the model, prevents co-adaptation of
@@ -59,8 +61,8 @@ def deepnn(x):
     h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob)
 
     # Map the 1024 features to 10 classes, one for each digit
-    W_fc2 = weight_variable([1024, 10])
-    b_fc2 = bias_variable([10])
+    W_fc2 = weight_variable([6400, NUM_CLASS])
+    b_fc2 = bias_variable([NUM_CLASS])
 
     y_conv = tf.matmul(h_fc1_drop, W_fc2) + b_fc2
     return y_conv, keep_prob
@@ -91,13 +93,11 @@ def bias_variable(shape):
 
 def main(_):
     # Import data
-    mnist = input_data.read_data_sets(FLAGS.data_dir, one_hot=True)
+    datadir = "/Users/chenjing/PycharmProjects/mytask/dest/*.bin"
+    #mnist = input_data.read_data_sets(FLAGS.data_dir, one_hot=True)
 
     # Create the model
-    x = tf.placeholder(tf.float32, [None, 784])
-
-    # Define loss and optimizer
-    y_ = tf.placeholder(tf.float32, [None, 10])
+    x, y_ = chenjing.inputs(datadir)
 
     # Build the graph for the deep net
     y_conv, keep_prob = deepnn(x)
@@ -108,21 +108,33 @@ def main(_):
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
     with tf.Session() as sess:
+
         sess.run(tf.global_variables_initializer())
-        for i in range(20000):
-            batch = mnist.train.next_batch(50)
-            #print(batch.shape)
-            print(batch[0].shape)
-            print(batch[1].shape)
-            batch = myinput.distorted_inputs()
+        for i in range(10):
+            if i % 100 == 0:
+                train_accuracy = sess.run(accuracy, feed_dict={keep_prob: 1.0})
+                print('step %d, training accuracy %g' % (i, train_accuracy))
+            sess.run(train_step)
+            #print('test accuracy %g' % accuracy.eval(feed_dict={
+            #x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0}))
+
+
+
+        '''
+        sess.run(tf.global_variables_initializer())
+        for i in range(10):
+            #batch = mnist.train.next_batch(50)
+            batch = chenjing.inputs(datadir)
+            print(batch)
+            #print (batch)
             if i % 100 == 0:
                 train_accuracy = accuracy.eval(feed_dict={
                     x: batch[0], y_: batch[1], keep_prob: 1.0})
                 print('step %d, training accuracy %g' % (i, train_accuracy))
             train_step.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
-
-        print('test accuracy %g' % accuracy.eval(feed_dict={
-        x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0}))
+        '''
+        #print('test accuracy %g' % accuracy.eval(feed_dict={
+        #x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0}))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
