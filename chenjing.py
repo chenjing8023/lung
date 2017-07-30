@@ -13,12 +13,12 @@ class Hyperparams:
 
     # parameters for label
     label_dtype = np.uint8 
-    label_bytes = 1
+    label_bytes = 2
 
     # other parameters
     num_classes = 2
     num_threads = 1
-    batch_size = 2
+    batch_size = 64
 
 HP = Hyperparams # alias
 
@@ -49,7 +49,7 @@ def read_record(filename_queue):
 
     # Do proper reshape
 
-    result.label = tf.reshape(label, [1])
+    result.label = tf.reshape(label, [HP.label_bytes])
     result.image = tf.reshape(image, [HP.image_height * HP.image_width * HP.image_depth])
     result.image = tf.cast(result.image, tf.float32)
     return result
@@ -83,7 +83,7 @@ def inputs(datadir, is_training=True):
     min_queue_examples = HP.batch_size * 32
     return generate_batch([image, label], min_queue_examples, HP.batch_size, shuffle=is_training)
 
-datadir = "/Users/chenjing/PycharmProjects/mytask/dest/*.bin"
+datadir = "D:\\chenjing\\lung\\dest\\*.bin"
 '''
 with tf.Graph().as_default():
     data = inputs(datadir,False)
@@ -91,7 +91,6 @@ with tf.Graph().as_default():
     with sv.managed_session() as sess:
         images, labels = sess.run(data)
         print(images)
-        print(images.shape, labels.shape)
+        print(labels)
         # data2 = sess.run(data[1])
-        # print(data2)
-'''
+ '''       # print(data2)
