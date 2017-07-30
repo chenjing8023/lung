@@ -13,7 +13,7 @@ import chenjing
 FLAGS = None
 WIDTH = 40
 HEIGHT = 40
-NUM_CLASS = 1
+NUM_CLASS = 2
 
 def deepnn(x):
     """deepnn builds the graph for a deep net for classifying digits.
@@ -93,7 +93,7 @@ def bias_variable(shape):
 
 def main(_):
     # Import data
-    datadir = "/Users/chenjing/PycharmProjects/mytask/dest/*.bin"
+    datadir = "D:\\chenjing\\lung\\dest\\*.bin"
     #mnist = input_data.read_data_sets(FLAGS.data_dir, one_hot=True)
 
     # Create the model
@@ -101,20 +101,22 @@ def main(_):
 
     # Build the graph for the deep net
     y_conv, keep_prob = deepnn(x)
-
+    print(x.shape)
+    print(y_conv)
+    print(y_)
     cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y_conv))
     train_step = tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
     correct_prediction = tf.equal(tf.argmax(y_conv, 1), tf.argmax(y_, 1))
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
-    with tf.Session() as sess:
-
-        sess.run(tf.global_variables_initializer())
-        for i in range(10):
-            if i % 100 == 0:
-                train_accuracy = sess.run(accuracy, feed_dict={keep_prob: 1.0})
-                print('step %d, training accuracy %g' % (i, train_accuracy))
-            sess.run(train_step)
+    sv = tf.train.Supervisor(logdir='save')
+    with sv.managed_session() as sess:
+        for i in range(100):
+            if i % 10 == 0:
+                # train_accuracy = sess.run(accuracy, feed_dict={keep_prob: 1.0})
+                train_accuracy, _y_conv, _y_ = sess.run([accuracy, y_conv, y_], feed_dict={keep_prob: 1.0})
+                print('step %d, training accuracy %s, %s, %s' % (i, train_accuracy,_y_conv,_y_))
+            sess.run(train_step,feed_dict={keep_prob: 0.5})
             #print('test accuracy %g' % accuracy.eval(feed_dict={
             #x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0}))
 
