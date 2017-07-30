@@ -101,9 +101,6 @@ def main(_):
 
     # Build the graph for the deep net
     y_conv, keep_prob = deepnn(x)
-    print(x.shape)
-    print(y_conv)
-    print(y_)
     cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y_conv))
     train_step = tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
     correct_prediction = tf.equal(tf.argmax(y_conv, 1), tf.argmax(y_, 1))
@@ -111,11 +108,12 @@ def main(_):
 
     sv = tf.train.Supervisor(logdir='save')
     with sv.managed_session() as sess:
-        for i in range(100):
-            if i % 10 == 0:
+        for i in range(50000):
+            if i % 100 == 0:
                 # train_accuracy = sess.run(accuracy, feed_dict={keep_prob: 1.0})
-                train_accuracy, _y_conv, _y_ = sess.run([accuracy, y_conv, y_], feed_dict={keep_prob: 1.0})
-                print('step %d, training accuracy %s, %s, %s' % (i, train_accuracy,_y_conv,_y_))
+                train_accuracy = sess.run(accuracy, feed_dict={keep_prob: 1.0})
+                print('step %d, training accuracy %s' % (i, train_accuracy))
+
             sess.run(train_step,feed_dict={keep_prob: 0.5})
             #print('test accuracy %g' % accuracy.eval(feed_dict={
             #x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0}))
@@ -139,9 +137,9 @@ def main(_):
         #x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0}))
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--data_dir', type=str,
-                      default='/tmp/tensorflow/mnist/input_data',
-                      help='Directory for storing input data')
-    FLAGS, unparsed = parser.parse_known_args()
-    tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
+    #parser = argparse.ArgumentParser()
+    # parser.add_argument('--data_dir', type=str,
+    #                  default='/tmp/tensorflow/mnist/input_data',
+    #                  help='Directory for storing input data')
+    #FLAGS, unparsed = parser.parse_known_args()
+    tf.app.run(main=main, argv=[FLAGS])

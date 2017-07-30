@@ -18,7 +18,7 @@ class Hyperparams:
     # other parameters
     num_classes = 2
     num_threads = 1
-    batch_size = 64
+    batch_size = 128
 
 HP = Hyperparams # alias
 
@@ -84,7 +84,7 @@ def inputs(datadir, is_training=True):
     return generate_batch([image, label], min_queue_examples, HP.batch_size, shuffle=is_training)
 
 datadir = "D:\\chenjing\\lung\\dest\\*.bin"
-'''
+
 with tf.Graph().as_default():
     data = inputs(datadir,False)
     sv = tf.train.Supervisor(logdir='save')
@@ -93,4 +93,4 @@ with tf.Graph().as_default():
         print(images)
         print(labels)
         # data2 = sess.run(data[1])
- '''       # print(data2)
+        # print(data2)
